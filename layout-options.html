@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layout Options — Dillon Ketcham</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --accent: #c8a96e;
+      --accent-soft: rgba(200, 169, 110, 0.12);
+      --accent-dim: rgba(200, 169, 110, 0.45);
+      --text: #e8e8e8;
+      --text-muted: #888888;
+      --timeline-line: #2a2a2a;
+      --hobby-accent: #7eb8a8;
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, serif;
+      line-height: 1.7;
+    }
+
+    /* ── DEMO HEADER ── */
+    .demo-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+    }
+
+    .demo-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .demo-title {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .demo-title span { color: var(--text-muted); font-weight: 300; }
+
+    .demo-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+    }
+
+    .demo-nav a {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .demo-nav a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .demo-intro {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .demo-intro h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+
+    .demo-intro p {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 36rem;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .demo-intro a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .demo-intro a:hover { text-decoration: underline; }
+
+    /* ── OPTION SECTIONS ── */
+    .option-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem 5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .option-badge {
+      display: inline-block;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .option-heading {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .option-desc {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 40rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .option-preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      position: relative;
+    }
+
+    .option-preview::before {
+      content: 'EXAMPLE PREVIEW';
+      position: absolute;
+      top: 0.75rem;
+      right: 1rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: #444;
+    }
+
+    .preview-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .item-date, .mini-date {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .item-role, .mini-role {
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 0.15rem;
+    }
+
+    .item-org, .mini-org {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .item-body, .mini-body {
+      font-size: 0.85rem;
+      color: #b0b0b0;
+      line-height: 1.65;
+    }
+
+    .skill-tag {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+    .skill-tag.hobby { border-color: rgba(126, 184, 168, 0.35); }
+    .skill-tag.hobby:hover { border-color: var(--hobby-accent); color: var(--hobby-accent); }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    /* ── OPTION 1: BENTO ── */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 0.85rem;
+    }
+
+    .bento-cell {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .bento-cell:hover { border-color: var(--accent-dim); }
+
+    .bento-cell.wide { grid-column: span 2; }
+    .bento-cell.tall { grid-row: span 1; }
+
+    .bento-cell h3 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .bento-hobby {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .bento-hobby:last-child { margin-bottom: 0; }
+
+    .bento-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .bento-hobby strong {
+      display: block;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .bento-hobby span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .bento-reveal {
+      font-size: 0.82rem;
+      color: #b0b0b0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s;
+    }
+
+    .bento-cell:hover .bento-reveal {
+      max-height: 4rem;
+      opacity: 1;
+      margin-top: 0.5rem;
+    }
+
+    .impact-metric {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 1.75rem;
+      color: var(--accent);
+      font-weight: 300;
+      margin: 0.25rem 0 0.35rem;
+    }
+
+    @media (max-width: 700px) {
+      .bento { grid-template-columns: 1fr 1fr; }
+      .bento-cell.wide { grid-column: span 2; }
+    }
+
+    @media (max-width: 420px) {
+      .bento { grid-template-columns: 1fr; }
+      .bento-cell.wide { grid-column: span 1; }
+    }
+
+    /* ── OPTION 2: TABS ── */
+    .tabs-wrap { max-width: 100%; }
+
+    .tab-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover { border-color: var(--accent-dim); color: var(--text); }
+    .tab-btn.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: tabIn 0.35s ease;
+    }
+
+    .tab-panel.active { display: block; }
+
+    @keyframes tabIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .tab-card:last-child { margin-bottom: 0; }
+
+    /* ── OPTION 3: SECOND TIMELINE ── */
+    .life-timeline { position: relative; padding: 0.5rem 0; }
+
+    .life-timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent-dim) 0%, var(--timeline-line) 100%);
+      opacity: 0.7;
+    }
+
+    .life-item {
+      position: relative;
+      display: flex;
+      margin-bottom: 2.5rem;
+    }
+
+    .life-item:last-child { margin-bottom: 0; }
+    .life-item.left { flex-direction: row-reverse; }
+    .life-item.right { flex-direction: row; }
+
+    .life-card {
+      width: calc(50% - 2.5rem);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.15rem 1.35rem;
+      position: relative;
+    }
+
+    .life-card::after {
+      content: '';
+      position: absolute;
+      top: 1rem;
+      width: 1.75rem;
+      height: 1px;
+      background: var(--accent-dim);
+    }
+
+    .life-item.left .life-card::after { left: 100%; }
+    .life-item.right .life-card::after { right: 100%; }
+
+    .life-dot {
+      position: absolute;
+      left: 50%;
+      top: 0.85rem;
+      transform: translateX(-50%);
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      box-shadow: 0 0 0 3px var(--surface), 0 0 0 4px var(--accent-dim);
+    }
+
+    .life-card.type-hobby .mini-date { color: var(--hobby-accent); }
+    .life-card.type-hobby .life-dot-sub {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .life-timeline::before { left: 1rem; }
+      .life-item, .life-item.left, .life-item.right {
+        flex-direction: row;
+        padding-left: 2.5rem;
+      }
+      .life-card {
+        width: 100%;
+      }
+      .life-card::after { display: none; }
+      .life-dot { left: 1rem; }
+    }
+
+    /* ── OPTION 4: FLIP CARDS ── */
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .flip-card {
+      aspect-ratio: 1;
+      perspective: 800px;
+      cursor: pointer;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.55s ease;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-inner,
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+
+    .flip-front, .flip-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .flip-front {
+      background: var(--bg);
+    }
+
+    .flip-back {
+      background: var(--accent-soft);
+      border-color: var(--accent-dim);
+      transform: rotateY(180deg);
+    }
+
+    .flip-front .flip-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+
+    .flip-front strong {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .flip-back p {
+      font-size: 0.75rem;
+      color: #b0b0b0;
+      line-height: 1.5;
+    }
+
+    .flip-section-title {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .flip-section-title:first-child { margin-top: 0; }
+
+    .flip-hint {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.68rem;
+      color: #555;
+      text-align: center;
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── OPTION 5: COMBINED ── */
+    .combined-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .combined-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .combined-box h3 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .hobby-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .hobby-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.45rem 0.85rem;
+      border: 1px solid rgba(126, 184, 168, 0.35);
+      border-radius: 2rem;
+      color: var(--text-muted);
+      background: rgba(126, 184, 168, 0.06);
+    }
+
+    @media (max-width: 600px) {
+      .combined-top { grid-template-columns: 1fr; }
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .pros-cons div {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .pros-cons strong {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    @media (max-width: 500px) {
+      .pros-cons { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="demo-header">
+    <div class="demo-header-inner">
+      <p class="demo-title">Layout demos <span>· sample content</span></p>
+      <nav class="demo-nav">
+        <a href="#option-1">1 Bento</a>
+        <a href="#option-2">2 Tabs</a>
+        <a href="#option-3">3 Timeline</a>
+        <a href="#option-4">4 Flip</a>
+        <a href="#option-5">5 Combined</a>
+        <a href="index.html">Main site →</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="demo-intro">
+    <h1>Hobbies, Skills, Charity & Volunteer</h1>
+    <p>Five layout approaches using your site’s colors and sample copy. Pick a favorite and we’ll add it to <a href="index.html">index.html</a> or keep this as a separate page.</p>
+  </div>
+
+  <!-- OPTION 1 -->
+  <section class="option-section" id="option-1">
+    <span class="option-badge">Option 1</span>
+    <h2 class="option-heading">Bento grid</h2>
+    <p class="option-desc">Uneven tiles in a mosaic — one wide story for volunteer work, smaller cells for hobbies and charity. Hover a tile to reveal extra detail.</p>
+    <div class="option-preview">
+      <p class="preview-label">Beyond the Court</p>
+      <div class="bento">
+        <div class="bento-cell wide">
+          <h3>Volunteer</h3>
+          <p class="mini-role">Junior Clinic Assistant</p>
+          <p class="mini-org">Local Youth Tennis Program · 2023–Present</p>
+          <p class="mini-body">Helps run weekend clinics for ages 8–14 — court setup, drills, and encouraging new players.</p>
+        </div>
+        <div class="bento-cell">
+          <h3>Charity</h3>
+          <p class="impact-metric">120+</p>
+          <p class="mini-body">Hours supporting community food drives and annual club charity events.</p>
+          <p class="bento-reveal">Organized member donation drives each fall.</p>
+        </div>
+        <div class="bento-cell">
+          <h3>Hobbies</h3>
+          <div class="bento-hobby">
+            <span class="bento-icon">🎾</span>
+            <div><strong>Tennis</strong><span>Competitive & coaching mindset</span></div>
+          </div>
+          <div class="bento-hobby">
+            <span class="bento-icon">✈</span>
+            <div><strong>Travel</strong><span>Exploring new cities & cultures</span></div>
+          </div>
+        </div>
+        <div class="bento-cell wide">
+          <h3>Skills (personal interests)</h3>
+          <div class="skills-grid">
+            <span class="skill-tag hobby">Photography</span>
+            <span class="skill-tag hobby">Drone flying</span>
+            <span class="skill-tag hobby">Fitness</span>
+            <span class="skill-tag">Communication</span>
+            <span class="skill-tag">Problem Solving</span>
+            <span class="skill-tag">Leadership</span>
+          </div>
+          <p class="bento-reveal">Green-tinted tags = personal; gold = professional (same as your main site).</p>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div><strong>Best for</strong>Modern, scannable layout. Great when you have mixed content lengths.</div>
+        <div><strong>Trade-off</strong>Less “story arc” than a timeline; needs careful mobile stacking.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 2 -->
+  <section class="option-section" id="option-2">
+    <span class="option-badge">Option 2</span>
+    <h2 class="option-heading">Tabbed panel</h2>
+    <p class="option-desc">Four tabs — only one category visible at a time. Clean and compact; ideal if you have lots of text per section.</p>
+    <div class="option-preview">
+      <p class="preview-label">Life & Impact</p>
+      <div class="tabs-wrap">
+        <div class="tab-buttons" role="tablist">
+          <button class="tab-btn active" data-tab="volunteer">Volunteer</button>
+          <button class="tab-btn" data-tab="charity">Charity</button>
+          <button class="tab-btn" data-tab="hobbies">Hobbies</button>
+          <button class="tab-btn" data-tab="skills">Skills</button>
+        </div>
+        <div class="tab-panel active" id="tab-volunteer">
+          <div class="tab-card">
+            <p class="mini-date">2023 — Present</p>
+            <p class="mini-role">Junior Clinic Assistant</p>
+            <p class="mini-org">Youth Tennis Program</p>
+            <p class="mini-body">Weekend clinics, drill support, and mentoring junior players.</p>
+          </div>
+          <div class="tab-card">
+            <p class="mini-date">2021 — 2022</p>
+            <p class="mini-role">Event Volunteer</p>
+            <p class="mini-org">Community Fundraiser · Omaha, NE</p>
+            <p class="mini-body">Registration, logistics, and donor outreach for local charity runs.</p>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-charity">
+          <div class="tab-card">
+            <p class="mini-role">Annual Club Charity Day</p>
+            <p class="mini-org">Paradise Valley Country Club</p>
+            <p class="mini-body">Coordinated member participation and court activities; proceeds to local youth sports grants.</p>
+          </div>
+          <div class="tab-card">
+            <p class="mini-role">Food Drive Support</p>
+            <p class="mini-org">Scottsdale Community Partners</p>
+            <p class="mini-body">120+ volunteer hours sorting and distributing donations.</p>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-hobbies">
+          <div class="tab-card">
+            <p class="mini-role">Tennis</p>
+            <p class="mini-body">Still plays competitively — discipline, strategy, and love of teaching the game.</p>
+          </div>
+          <div class="tab-card">
+            <p class="mini-role">Travel & exploration</p>
+            <p class="mini-body">Open to travel for work; enjoys discovering new cities and cultures off the court.</p>
+          </div>
+          <div class="tab-card">
+            <p class="mini-role">Photography & drones</p>
+            <p class="mini-body">Carried over from KAP 3D — creative outlet and technical hobby.</p>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-skills">
+          <p class="mini-body" style="margin-bottom:1rem;color:var(--text-muted);font-size:0.82rem;">Professional skills (from your résumé):</p>
+          <div class="skills-grid" style="margin-bottom:1.25rem;">
+            <span class="skill-tag">Tennis Coaching</span>
+            <span class="skill-tag">Client Relations</span>
+            <span class="skill-tag">Business Strategy</span>
+          </div>
+          <p class="mini-body" style="margin-bottom:1rem;color:var(--text-muted);font-size:0.82rem;">Personal / hobby skills:</p>
+          <div class="skills-grid">
+            <span class="skill-tag hobby">Photography</span>
+            <span class="skill-tag hobby">Drone operation</span>
+            <span class="skill-tag hobby">CRM & web tools</span>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div><strong>Best for</strong>Long copy without a long scroll. Very mobile-friendly.</div>
+        <div><strong>Trade-off</strong>Content is hidden until clicked — less immediate “wow.”</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 3 -->
+  <section class="option-section" id="option-3">
+    <span class="option-badge">Option 3</span>
+    <h2 class="option-heading">Second timeline (lighter spine)</h2>
+    <p class="option-desc">Continues your career timeline visual language with a softer gold line — volunteer and charity as dated cards; hobbies as tags on one entry.</p>
+    <div class="option-preview">
+      <p class="preview-label">Life & Impact</p>
+      <div class="life-timeline">
+        <div class="life-item left">
+          <div class="life-card">
+            <p class="mini-date">2023 — Present</p>
+            <p class="mini-role">Junior Clinic Assistant</p>
+            <p class="mini-org">Youth Tennis Program · Volunteer</p>
+            <p class="mini-body">Weekend clinics and player development support for juniors ages 8–14.</p>
+          </div>
+          <div class="life-dot"></div>
+        </div>
+        <div class="life-item right">
+          <div class="life-card">
+            <p class="mini-date">Annual · 2024–Present</p>
+            <p class="mini-role">Charity Day Coordinator</p>
+            <p class="mini-org">Paradise Valley Country Club</p>
+            <p class="mini-body">Member drives and court events benefiting local youth sports grants.</p>
+          </div>
+          <div class="life-dot"></div>
+        </div>
+        <div class="life-item left">
+          <div class="life-card type-hobby">
+            <p class="mini-date">Interests</p>
+            <p class="mini-role">Hobbies & personal skills</p>
+            <p class="mini-body">What keeps me balanced off the clock.</p>
+            <div class="life-dot-sub skills-grid">
+              <span class="skill-tag hobby">Tennis</span>
+              <span class="skill-tag hobby">Travel</span>
+              <span class="skill-tag hobby">Photography</span>
+              <span class="skill-tag hobby">Fitness</span>
+            </div>
+          </div>
+          <div class="life-dot"></div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div><strong>Best for</strong>One continuous scroll story; matches your Experience section perfectly.</div>
+        <div><strong>Trade-off</strong>Feels repetitive if volunteer entries are few; hobbies need a dedicated card.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 4 -->
+  <section class="option-section" id="option-4">
+    <span class="option-badge">Option 4</span>
+    <h2 class="option-heading">Flip cards</h2>
+    <p class="option-desc">Hover (or tap on mobile) to flip — front shows a label/icon, back reveals a short story. Playful; best for hobbies, use sparingly for charity.</p>
+    <div class="option-preview">
+      <p class="preview-label">Beyond the Court</p>
+      <p class="flip-section-title">Hobbies — hover to flip</p>
+      <div class="flip-grid">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front"><span class="flip-icon">🎾</span><strong>Tennis</strong></div>
+            <div class="flip-back"><p>Competitive play and coaching mindset — on court several times a week.</p></div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front"><span class="flip-icon">✈</span><strong>Travel</strong></div>
+            <div class="flip-back"><p>Open to travel for work; loves exploring new cities and cultures.</p></div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front"><span class="flip-icon">📷</span><strong>Photo</strong></div>
+            <div class="flip-back"><p>Drone and camera work from KAP 3D — still a creative outlet.</p></div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front"><span class="flip-icon">💪</span><strong>Fitness</strong></div>
+            <div class="flip-back"><p>Strength and conditioning to support performance on court.</p></div>
+          </div>
+        </div>
+      </div>
+      <p class="flip-section-title">Volunteer & charity</p>
+      <div class="flip-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+        <div class="flip-card" style="aspect-ratio: 4/3;">
+          <div class="flip-inner">
+            <div class="flip-front"><span class="flip-icon">🤝</span><strong>Volunteer</strong></div>
+            <div class="flip-back"><p>Junior clinic assistant since 2023 — drills, setup, mentoring youth players.</p></div>
+          </div>
+        </div>
+        <div class="flip-card" style="aspect-ratio: 4/3;">
+          <div class="flip-inner">
+            <div class="flip-front"><span class="flip-icon">❤</span><strong>Charity</strong></div>
+            <div class="flip-back"><p>120+ hours with food drives and club charity days for youth sports grants.</p></div>
+          </div>
+        </div>
+      </div>
+      <p class="flip-hint">Tap a card on touch devices</p>
+      <div class="pros-cons">
+        <div><strong>Best for</strong>Memorable, interactive feel; great for 4–8 short items.</div>
+        <div><strong>Trade-off</strong>Detail is hidden until interaction; not ideal for long bios.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 5 -->
+  <section class="option-section" id="option-5">
+    <span class="option-badge">Option 5 · Recommended</span>
+    <h2 class="option-heading">Combined (timeline + hobby pills)</h2>
+    <p class="option-desc">Our top pick for your site: volunteer & charity on a lighter timeline below work, hobbies as teal pills, professional skills stay as gold tags.</p>
+    <div class="option-preview">
+      <p class="preview-label">Life & Impact</p>
+      <div class="life-timeline" style="margin-bottom:2rem;">
+        <div class="life-item left">
+          <div class="life-card">
+            <p class="mini-date">2023 — Present</p>
+            <p class="mini-role">Junior Clinic Assistant</p>
+            <p class="mini-org">Volunteer · Youth Tennis</p>
+            <p class="mini-body">Weekend clinics and mentoring for junior players.</p>
+          </div>
+          <div class="life-dot"></div>
+        </div>
+        <div class="life-item right">
+          <div class="life-card">
+            <p class="mini-date">2024 — Present</p>
+            <p class="mini-role">Charity Day Coordinator</p>
+            <p class="mini-org">Paradise Valley Country Club</p>
+            <p class="mini-body">Member drives benefiting local youth sports programs.</p>
+          </div>
+          <div class="life-dot"></div>
+        </div>
+      </div>
+      <div class="combined-top">
+        <div class="combined-box">
+          <h3>Hobbies</h3>
+          <div class="hobby-pills">
+            <span class="hobby-pill">🎾 Tennis</span>
+            <span class="hobby-pill">✈ Travel</span>
+            <span class="hobby-pill">📷 Photography</span>
+            <span class="hobby-pill">💪 Fitness</span>
+          </div>
+        </div>
+        <div class="combined-box">
+          <h3>Professional skills</h3>
+          <div class="skills-grid">
+            <span class="skill-tag">Tennis Coaching</span>
+            <span class="skill-tag">Client Relations</span>
+            <span class="skill-tag">Business Strategy</span>
+            <span class="skill-tag">Financial Planning</span>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div><strong>Best for</strong>Your current portfolio — cohesive, professional, still personal.</div>
+        <div><strong>Trade-off</strong>Slightly more section height than tabs or bento alone.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);">
+    <p style="font-family:'Helvetica Neue',sans-serif;font-size:0.78rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">Ready to build?</p>
+    <p style="font-size:0.9rem;color:#b0b0b0;">Tell us which option (1–5) you prefer — we’ll add it to <a href="index.html" style="color:var(--accent);">index.html</a> or keep this page linked from the main site.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('flipped'));
+    });
+  </script>
+</body>
+</html>
