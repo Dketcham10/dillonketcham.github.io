@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dillon Ketcham</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --accent: #c8a96e;
+      --accent-soft: rgba(200, 169, 110, 0.12);
+      --text: #e8e8e8;
+      --text-muted: #888888;
+      --timeline-line: #2a2a2a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', serif;
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(200,169,110,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--text-muted);
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero-links a {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .hero-links a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: fadeInUp 1s ease 1s both;
+    }
+
+    .scroll-cue svg {
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ── TIMELINE SECTION ── */
+    #timeline {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 6rem 2rem 8rem;
+    }
+
+    .section-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .timeline-track {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+
+    /* The vertical line */
+    .timeline-track::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--timeline-line) 100%);
+    }
+
+    /* ── TIMELINE ITEM ── */
+    .timeline-item {
+      position: relative;
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Dot on the line */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.55rem;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateX(-4px);
+      box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px var(--accent);
+    }
+
+    .item-date {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .item-role {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 0.2rem;
+      line-height: 1.3;
+    }
+
+    .item-org {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .item-body {
+      font-size: 0.95rem;
+      color: #b0b0b0;
+      line-height: 1.75;
+    }
+
+    /* ── SKILLS BLOCK ── */
+    .skills-block {
+      margin-top: 5rem;
+      padding-top: 4rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.5rem;
+    }
+
+    .skill-tag {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── CONTACT FOOTER ── */
+    #contact {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      border-top: 1px solid var(--border);
+    }
+
+    #contact p {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    #contact a {
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    #contact a:hover { text-decoration: underline; }
+
+    .footer-note {
+      margin-top: 3rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.7rem;
+      color: #444;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <p class="hero-eyebrow">Portfolio</p>
+    <h1 class="hero-name">Dillon Ketcham</h1>
+    <p class="hero-title">Head Racquets Professional &nbsp;·&nbsp; Scottsdale, AZ</p>
+    <nav class="hero-links">
+      <a href="mailto:dketcham@Paradisevalleycc.com">Email</a>
+      <a href="tel:4025993833">402-599-3833</a>
+      <a href="#timeline">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M7 1v12M1 7l6 6 6-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ── TIMELINE ── -->
+  <section id="timeline">
+    <p class="section-label">Experience</p>
+
+    <div class="timeline-track">
+
+      <!-- Most recent first -->
+      <div class="timeline-item">
+        <p class="item-date">Jun 2025 — Present</p>
+        <h2 class="item-role">Racquet Sports Professional</h2>
+        <p class="item-org">Paradise Valley Country Club &nbsp;·&nbsp; Scottsdale, AZ</p>
+        <p class="item-body">Racquet sports professional with experience in tennis coaching, country club operations, business strategy, and client relationship management. Develops players of all ages through technical coaching, match strategy, fitness, and mental performance while creating exceptional member experiences and engaging programming.</p>
+      </div>
+
+      <div class="timeline-item">
+        <p class="item-date">Jan 2025 — Jun 2025</p>
+        <h2 class="item-role">Racquet Sports Professional</h2>
+        <p class="item-org">DC Ranch Village &nbsp;·&nbsp; Scottsdale, AZ</p>
+        <p class="item-body">Delivered private and group instruction while supporting clinics, tournaments, junior development, and member programming. Focused on player development, member engagement, and creating exceptional racquet sports experiences.</p>
+      </div>
+
+      <div class="timeline-item">
+        <p class="item-date">Jan 2022 — Dec 2024</p>
+        <h2 class="item-role">Financial Advisor</h2>
+        <p class="item-org">Renaissance Financial &nbsp;·&nbsp; Phoenix, AZ</p>
+        <p class="item-body">Cultivated and maintained relationships with high-net-worth clients, achieving a 92% retention rate and growing Assets Under Management by 200% year over year to nearly $10 million. Provided strategic account management including detailed investment analysis, risk assessment, and personalized financial planning.</p>
+      </div>
+
+      <div class="timeline-item">
+        <p class="item-date">Jan 2018 — Dec 2021</p>
+        <h2 class="item-role">Founder</h2>
+        <p class="item-org">KAP 3D Virtual Tours and Drones &nbsp;·&nbsp; Omaha, NE</p>
+        <p class="item-body">Led customer-centric initiatives including a custom CRM system, SEO-optimized website, and passive income web domain revenue. Gathered customer feedback to refine products and services, directly influencing product development and marketing strategies.</p>
+      </div>
+
+      <div class="timeline-item">
+        <p class="item-date">Jan 2017 — May 2021</p>
+        <h2 class="item-role">B.S. Business Administration — Finance</h2>
+        <p class="item-org">University of Nebraska – Lincoln &nbsp;·&nbsp; Lincoln, NE</p>
+        <p class="item-body">Major in Finance, minor in Management.</p>
+      </div>
+
+    </div>
+
+    <!-- Skills -->
+    <div class="skills-block">
+      <p class="section-label">Areas of Expertise</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Relationship Building</span>
+        <span class="skill-tag">Organizational Skills</span>
+        <span class="skill-tag">Self Motivation</span>
+        <span class="skill-tag">Problem Solving</span>
+        <span class="skill-tag">Communication</span>
+        <span class="skill-tag">Tennis Coaching</span>
+        <span class="skill-tag">Financial Planning</span>
+        <span class="skill-tag">Business Strategy</span>
+        <span class="skill-tag">Client Relations</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <footer id="contact">
+    <p>Get in touch</p>
+    <a href="mailto:dketcham@Paradisevalleycc.com">dketcham@Paradisevalleycc.com</a>
+    <p class="footer-note">© 2026 Dillon Ketcham</p>
+  </footer>
+
+  <script>
+    // Intersection observer for scroll-in animations
+    const items = document.querySelectorAll('.timeline-item');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    items.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
