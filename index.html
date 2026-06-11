@@ -197,35 +197,112 @@
       line-height: 1.6;
     }
 
-    /* ── ROLE BOXES ── */
-    .roles-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
+    /* ── EXPERIENCE TIMELINE (centered spine) ── */
+    .experience-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 4.5rem;
+      position: relative;
     }
 
-    .role-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.5rem 1.75rem;
+    .experience-stack::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--timeline-line) 100%);
+      z-index: 0;
+    }
+
+    .job-block {
+      position: relative;
+      z-index: 1;
       opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
 
-    .role-card.visible {
+    .job-block.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .role-card:hover { border-color: var(--accent-dim); }
-
-    .role-card.featured {
-      grid-column: 1 / -1;
-      border-color: rgba(200, 169, 110, 0.25);
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(200, 169, 110, 0.04) 100%);
+    .job-row {
+      display: grid;
+      grid-template-columns: 1fr 2.5rem 1fr;
+      gap: 0 1.25rem;
+      align-items: start;
     }
+
+    .job-spine {
+      display: flex;
+      justify-content: center;
+      padding-top: 1.25rem;
+    }
+
+    .timeline-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+      flex-shrink: 0;
+    }
+
+    .job-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .timeline-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.35rem 1.5rem;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .timeline-card:hover { border-color: var(--accent-dim); }
+
+    .job-col-left .timeline-card::after,
+    .job-col-right .timeline-card::after {
+      content: '';
+      position: absolute;
+      top: 1.25rem;
+      width: 1.25rem;
+      height: 1px;
+      background: var(--accent-dim);
+    }
+
+    .job-col-left .timeline-card::after {
+      right: -1.25rem;
+    }
+
+    .job-col-right .timeline-card::after {
+      left: -1.25rem;
+    }
+
+    .card-role {
+      border-color: rgba(200, 169, 110, 0.22);
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(200, 169, 110, 0.05) 100%);
+    }
+
+    .cell-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.65rem;
+    }
+
+    .cell-label.gold { color: var(--accent); }
+    .cell-label.teal { color: var(--hobby-accent); }
 
     .role-date {
       font-family: 'Helvetica Neue', sans-serif;
@@ -233,13 +310,13 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
     .role-position {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 400;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.2rem;
       line-height: 1.3;
     }
 
@@ -247,77 +324,35 @@
       font-family: 'Helvetica Neue', sans-serif;
       font-size: 0.82rem;
       color: var(--text-muted);
-      margin-bottom: 0.9rem;
-    }
-
-    .role-desc {
-      font-size: 0.88rem;
-      color: #b0b0b0;
-      line-height: 1.75;
-    }
-
-    @media (max-width: 720px) {
-      .roles-grid { grid-template-columns: 1fr; }
-      .role-card.featured { grid-column: 1; }
-    }
-
-    /* ── BENTO GRID ── */
-    .bento {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.85rem;
-    }
-
-    .bento-cell {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.35rem 1.5rem;
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s;
-    }
-
-    .bento-cell.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .bento-cell:hover { border-color: var(--accent-dim); }
-
-    .bento-cell.span-2 { grid-column: span 2; }
-    .bento-cell.span-4 { grid-column: span 4; }
-
-    .bento-heading {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
       margin-bottom: 0.85rem;
     }
 
-    .bento-heading.teal { color: var(--hobby-accent); }
-
-    .bento-text {
+    .role-desc, .bento-text {
       font-size: 0.85rem;
       color: #b0b0b0;
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
-    .bento-sub {
+    .case-title {
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+      line-height: 1.35;
+    }
+
+    .case-metric {
       font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      font-size: 1.35rem;
+      font-weight: 300;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
     }
 
     .bento-metric {
       font-family: 'Helvetica Neue', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 300;
       color: var(--accent);
-      margin: 0.15rem 0 0.4rem;
+      margin: 0.1rem 0 0.35rem;
     }
 
     .skills-grid {
@@ -388,48 +423,21 @@
       color: var(--text-muted);
     }
 
-    /* Certifications grouped by role */
-    .cert-groups {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem 1.5rem;
-    }
-
-    .cert-group {
-      padding-top: 0.75rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .cert-group:first-child,
-    .cert-group:nth-child(2) {
-      padding-top: 0;
-      border-top: none;
-    }
-
-    .cert-org {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.45rem;
-    }
-
-    .cert-list {
+    .cert-list, .bullet-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
     }
 
-    .cert-list li {
+    .cert-list li, .bullet-list li {
       font-size: 0.82rem;
       color: #b0b0b0;
       padding-left: 0.85rem;
       position: relative;
     }
 
-    .cert-list li::before {
+    .cert-list li::before, .bullet-list li::before {
       content: '';
       position: absolute;
       left: 0;
@@ -440,20 +448,44 @@
       background: var(--accent-dim);
     }
 
-    @media (max-width: 700px) {
-      .bento { grid-template-columns: repeat(2, 1fr); }
-      .bento-cell.span-4 { grid-column: span 2; }
-      .cert-groups { grid-template-columns: 1fr; }
-      .cert-group:nth-child(2) {
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--border);
-      }
+    .side-empty {
+      font-size: 0.82rem;
+      color: #555;
+      font-style: italic;
     }
 
-    @media (max-width: 420px) {
-      .bento { grid-template-columns: 1fr; }
-      .bento-cell.span-2,
-      .bento-cell.span-4 { grid-column: span 1; }
+    @media (max-width: 768px) {
+      .experience-stack::before {
+        left: 0.65rem;
+        transform: none;
+      }
+
+      .job-row {
+        grid-template-columns: 1.5rem 1fr;
+        gap: 0 1rem;
+      }
+
+      .job-spine {
+        grid-column: 1;
+        grid-row: 1;
+        padding-top: 1.35rem;
+      }
+
+      .job-col-left {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .job-col-right {
+        grid-column: 2;
+        grid-row: 2;
+        margin-top: 0.5rem;
+      }
+
+      .job-col-left .timeline-card::after,
+      .job-col-right .timeline-card::after {
+        display: none;
+      }
     }
 
     /* ── CONTACT FOOTER ── */
@@ -508,7 +540,6 @@
         <span class="link-hover">480-881-0332</span>
       </a>
       <a href="#experience">Experience</a>
-      <a href="#life">Life & Impact</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="scroll-cue">
@@ -519,148 +550,335 @@
     </div>
   </section>
 
-  <!-- ── EXPERIENCE (ROLE BOXES) ── -->
+  <!-- ── EXPERIENCE: standardized timeline (left / center / right) ── -->
   <section id="experience" class="page-section">
     <p class="section-label">Experience</p>
-    <p class="section-intro">Professional roles — company, position, and impact at each step.</p>
+    <p class="section-intro">Left: role & case studies · Center: timeline · Right: skills, hobbies, certifications, volunteer & charity.</p>
 
-    <div class="roles-grid">
-      <article class="role-card featured reveal">
-        <p class="role-date">Jun 2025 — Present</p>
-        <h2 class="role-position">Racquet Sports Professional</h2>
-        <p class="role-company">Paradise Valley Country Club · Scottsdale, AZ</p>
-        <p class="role-desc">Tennis coaching, country club operations, business strategy, and client relationship management. Develops players of all ages through technical coaching, match strategy, fitness, and mental performance.</p>
-      </article>
+    <div class="experience-stack">
 
-      <article class="role-card reveal">
-        <p class="role-date">Jan 2025 — Jun 2025</p>
-        <h2 class="role-position">Racquet Sports Professional</h2>
-        <p class="role-company">DC Ranch Village · Scottsdale, AZ</p>
-        <p class="role-desc">Delivered private and group instruction while supporting clinics, tournaments, junior development, and member programming.</p>
-      </article>
-
-      <article class="role-card reveal">
-        <p class="role-date">Jan 2022 — Dec 2024</p>
-        <h2 class="role-position">Financial Advisor</h2>
-        <p class="role-company">Renaissance Financial · Phoenix, AZ</p>
-        <p class="role-desc">92% client retention. Grew AUM 200% YoY to nearly $10M. Strategic account management, investment analysis, risk assessment, and personalized financial planning.</p>
-      </article>
-
-      <article class="role-card reveal">
-        <p class="role-date">Jan 2018 — Dec 2021</p>
-        <h2 class="role-position">Founder</h2>
-        <p class="role-company">KAP 3D Virtual Tours and Drones · Omaha, NE</p>
-        <p class="role-desc">Built a custom CRM, SEO-optimized website, and passive income web domain revenue stream. Customer feedback drove product and marketing decisions.</p>
-      </article>
-
-      <article class="role-card reveal">
-        <p class="role-date">Jan 2017 — May 2021</p>
-        <h2 class="role-position">B.S. Business Administration — Finance</h2>
-        <p class="role-company">University of Nebraska – Lincoln · Lincoln, NE</p>
-        <p class="role-desc">Major in Finance, minor in Management.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- ── LIFE & IMPACT (BENTO) ── -->
-  <section id="life" class="page-section">
-    <p class="section-label">Life & Impact</p>
-    <p class="section-intro">Volunteer work, charity, skills, hobbies, and certifications earned along the way.</p>
-
-    <div class="bento">
-      <div class="bento-cell span-2 reveal">
-        <h3 class="bento-heading">Volunteer</h3>
-        <p class="bento-sub">Junior clinic support · Scottsdale area</p>
-        <p class="bento-text">Helps run weekend tennis clinics for juniors — court setup, drills, and encouraging new players. Add your organizations and dates here.</p>
-      </div>
-
-      <div class="bento-cell reveal">
-        <h3 class="bento-heading">Charity</h3>
-        <p class="bento-metric">—</p>
-        <p class="bento-text">Community food drives, club charity events, and youth sports grants. Replace with your hours or impact metrics.</p>
-      </div>
-
-      <div class="bento-cell reveal">
-        <h3 class="bento-heading teal">Hobbies</h3>
-        <div class="hobby-row">
-          <span class="hobby-icon">🎾</span>
-          <div><strong>Tennis</strong><span>Competitive play & coaching mindset</span></div>
-        </div>
-        <div class="hobby-row">
-          <span class="hobby-icon">✈</span>
-          <div><strong>Travel</strong><span>Open to travel for work & leisure</span></div>
-        </div>
-        <div class="hobby-row">
-          <span class="hobby-icon">📷</span>
-          <div><strong>Photography & drones</strong><span>From KAP 3D — still a creative outlet</span></div>
-        </div>
-      </div>
-
-      <div class="bento-cell span-2 reveal">
-        <h3 class="bento-heading">Skills</h3>
-        <div class="skills-grid">
-          <span class="skill-tag">Tennis Coaching</span>
-          <span class="skill-tag">Client Relations</span>
-          <span class="skill-tag">Financial Planning</span>
-          <span class="skill-tag">Business Strategy</span>
-          <span class="skill-tag">Communication</span>
-          <span class="skill-tag">Problem Solving</span>
-          <span class="skill-tag">Relationship Building</span>
-          <span class="skill-tag">Organizational Skills</span>
-        </div>
-      </div>
-
-      <div class="bento-cell reveal">
-        <h3 class="bento-heading teal">Personal interests</h3>
-        <div class="skills-grid">
-          <span class="skill-tag hobby">Fitness</span>
-          <span class="skill-tag hobby">Photography</span>
-          <span class="skill-tag hobby">Drone operation</span>
-          <span class="skill-tag hobby">CRM & web tools</span>
-        </div>
-      </div>
-
-      <div class="bento-cell span-4 reveal">
-        <h3 class="bento-heading">Certifications by role</h3>
-        <p class="bento-text" style="margin-bottom:1.25rem;">Licenses and credentials tied to each position — update with your exact cert names and dates.</p>
-        <div class="cert-groups">
-          <div class="cert-group">
-            <p class="cert-org">Paradise Valley Country Club</p>
-            <ul class="cert-list">
-              <li>USPTA / PTR certification (add yours)</li>
-              <li>CPR & first aid (if applicable)</li>
-            </ul>
+      <!-- SnowBirdian -->
+      <article class="job-block">
+        <div class="job-row">
+          <div class="job-col job-col-left">
+            <div class="timeline-card card-role">
+              <p class="role-date">May 2025 — Present</p>
+              <h2 class="role-position">Founder & Technology Consultant</h2>
+              <p class="role-company">SnowBirdian · Technology Consulting</p>
+              <p class="role-desc">Independent technology consulting — software, automation, web presence, and digital strategy from discovery through implementation and support.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Client engagement & delivery</p>
+              <p class="bento-text">Describe a SnowBirdian project — problem, approach, tools, and outcome.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Automation or web build</p>
+              <p class="bento-text">Website launch, workflow automation, integrations, or AI-assisted tooling.</p>
+            </div>
           </div>
-          <div class="cert-group">
-            <p class="cert-org">DC Ranch Village</p>
-            <ul class="cert-list">
-              <li>Tennis instruction certification</li>
-              <li>Junior program safety training</li>
-            </ul>
-          </div>
-          <div class="cert-group">
-            <p class="cert-org">Renaissance Financial</p>
-            <ul class="cert-list">
-              <li>Series 7 (General Securities Representative)</li>
-              <li>Series 66 (Uniform Combined State Law)</li>
-            </ul>
-          </div>
-          <div class="cert-group">
-            <p class="cert-org">KAP 3D Virtual Tours and Drones</p>
-            <ul class="cert-list">
-              <li>FAA Part 107 Remote Pilot (add if held)</li>
-              <li>Business & marketing self-directed training</li>
-            </ul>
-          </div>
-          <div class="cert-group">
-            <p class="cert-org">University of Nebraska – Lincoln</p>
-            <ul class="cert-list">
-              <li>B.S. Business Administration — Finance</li>
-              <li>Minor in Management</li>
-            </ul>
+          <div class="job-spine"><div class="timeline-dot"></div></div>
+          <div class="job-col job-col-right">
+            <div class="timeline-card">
+              <p class="cell-label">Skills</p>
+              <div class="skills-grid">
+                <span class="skill-tag">Technology Consulting</span>
+                <span class="skill-tag">Business Strategy</span>
+                <span class="skill-tag">Web Development</span>
+                <span class="skill-tag">CRM Systems</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label teal">Hobbies</p>
+              <div class="skills-grid">
+                <span class="skill-tag hobby">Automation</span>
+                <span class="skill-tag hobby">Travel</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Certifications</p>
+              <ul class="cert-list">
+                <li>Add tech certs or training</li>
+              </ul>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Volunteer</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Charity</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
           </div>
         </div>
-      </div>
+      </article>
+
+      <!-- Paradise Valley Country Club -->
+      <article class="job-block">
+        <div class="job-row">
+          <div class="job-col job-col-left">
+            <div class="timeline-card card-role">
+              <p class="role-date">Jun 2025 — Present</p>
+              <h2 class="role-position">Racquet Sports Professional</h2>
+              <p class="role-company">Paradise Valley Country Club · Scottsdale, AZ</p>
+              <p class="role-desc">Tennis coaching, country club operations, business strategy, and client relationship management. Technical coaching, match strategy, fitness, and mental performance for all ages.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Junior development pipeline</p>
+              <p class="bento-text">Structured progressions for junior players — add metrics or member success stories.</p>
+            </div>
+          </div>
+          <div class="job-spine"><div class="timeline-dot"></div></div>
+          <div class="job-col job-col-right">
+            <div class="timeline-card">
+              <p class="cell-label">Skills</p>
+              <div class="skills-grid">
+                <span class="skill-tag">Tennis Coaching</span>
+                <span class="skill-tag">Client Relations</span>
+                <span class="skill-tag">Clinic Programming</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label teal">Hobbies</p>
+              <div class="skills-grid">
+                <span class="skill-tag hobby">Tennis</span>
+                <span class="skill-tag hobby">Fitness</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Certifications</p>
+              <ul class="cert-list">
+                <li>USPTA / PTR (add yours)</li>
+                <li>CPR & first aid</li>
+              </ul>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Volunteer</p>
+              <p class="bento-text">Weekend junior clinics — add org, dates, and impact.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Charity</p>
+              <p class="bento-text">Club charity day & youth sports grants.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- DC Ranch Village -->
+      <article class="job-block">
+        <div class="job-row">
+          <div class="job-col job-col-left">
+            <div class="timeline-card card-role">
+              <p class="role-date">Jan 2025 — Jun 2025</p>
+              <h2 class="role-position">Assistant Racquet Sports Professional</h2>
+              <p class="role-company">DC Ranch Village · Scottsdale, AZ</p>
+              <p class="role-desc">Private and group instruction, clinics, tournaments, junior development, and member programming.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Member engagement & retention</p>
+              <p class="bento-text">Player development and programming that kept members active — add specific results.</p>
+            </div>
+          </div>
+          <div class="job-spine"><div class="timeline-dot"></div></div>
+          <div class="job-col job-col-right">
+            <div class="timeline-card">
+              <p class="cell-label">Skills</p>
+              <div class="skills-grid">
+                <span class="skill-tag">Group Instruction</span>
+                <span class="skill-tag">Tournaments</span>
+                <span class="skill-tag">Junior Development</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label teal">Hobbies</p>
+              <div class="skills-grid">
+                <span class="skill-tag hobby">Tennis</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Certifications</p>
+              <ul class="cert-list">
+                <li>Tennis instruction certification</li>
+                <li>Junior program safety training</li>
+              </ul>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Volunteer</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Charity</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Renaissance Financial -->
+      <article class="job-block">
+        <div class="job-row">
+          <div class="job-col job-col-left">
+            <div class="timeline-card card-role">
+              <p class="role-date">Jan 2022 — Dec 2024</p>
+              <h2 class="role-position">Financial Advisor</h2>
+              <p class="role-company">Renaissance Financial · Phoenix, AZ</p>
+              <p class="role-desc">Strategic account management, investment analysis, risk assessment, and personalized financial planning.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-metric">92% retention · ~$10M AUM</p>
+              <p class="case-title">Client growth at scale</p>
+              <p class="bento-text">Grew AUM 200% YoY while maintaining high retention — add a specific client or strategy win.</p>
+            </div>
+          </div>
+          <div class="job-spine"><div class="timeline-dot"></div></div>
+          <div class="job-col job-col-right">
+            <div class="timeline-card">
+              <p class="cell-label">Skills</p>
+              <div class="skills-grid">
+                <span class="skill-tag">High-Net-Worth Client Acquisition</span>
+                <span class="skill-tag">Partnership Development</span>
+                <span class="skill-tag">Investment Analysis</span>
+                <span class="skill-tag">Portfolio Construction & Management</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label teal">Hobbies</p>
+              <div class="skills-grid">
+                <span class="skill-tag hobby">Markets & research</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Certifications</p>
+              <ul class="cert-list">
+                <li>Series 7 — General Securities Representative</li>
+                <li>Series 66 — Uniform Combined State Law</li>
+              </ul>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Volunteer</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Charity</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- KAP 3D -->
+      <article class="job-block">
+        <div class="job-row">
+          <div class="job-col job-col-left">
+            <div class="timeline-card card-role">
+              <p class="role-date">Jan 2018 — Dec 2021</p>
+              <h2 class="role-position">Founder</h2>
+              <p class="role-company">KAP 3D Virtual Tours and Drones · Omaha, NE</p>
+              <p class="role-desc">Built a custom CRM, SEO-optimized website, and passive income web domain revenue stream. Customer feedback drove product and marketing.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Custom CRM & web revenue</p>
+              <p class="bento-text">End-to-end system from lead capture to delivery — client win or revenue milestone.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Drone & virtual tour delivery</p>
+              <p class="bento-text">Photography, 3D tours, or marketing campaign — your best project story.</p>
+            </div>
+          </div>
+          <div class="job-spine"><div class="timeline-dot"></div></div>
+          <div class="job-col job-col-right">
+            <div class="timeline-card">
+              <p class="cell-label">Skills</p>
+              <div class="skills-grid">
+                <span class="skill-tag">Business Strategy</span>
+                <span class="skill-tag">SEO</span>
+                <span class="skill-tag">CRM</span>
+                <span class="skill-tag">Marketing</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label teal">Hobbies</p>
+              <div class="skills-grid">
+                <span class="skill-tag hobby">Photography</span>
+                <span class="skill-tag hobby">Drones</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Certifications</p>
+              <ul class="cert-list">
+                <li>FAA Part 107 Remote Pilot (if held)</li>
+                <li>Business & marketing training</li>
+              </ul>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Volunteer</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Charity</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- University of Nebraska – Lincoln -->
+      <article class="job-block">
+        <div class="job-row">
+          <div class="job-col job-col-left">
+            <div class="timeline-card card-role">
+              <p class="role-date">Jan 2017 — May 2021</p>
+              <h2 class="role-position">B.S. Business Administration — Finance</h2>
+              <p class="role-company">University of Nebraska – Lincoln · Lincoln, NE</p>
+              <p class="role-desc">Major in Finance, minor in Management.</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Case study</p>
+              <p class="case-title">Capstone or notable coursework</p>
+              <p class="bento-text">Project, internship, or leadership role from school.</p>
+            </div>
+          </div>
+          <div class="job-spine"><div class="timeline-dot"></div></div>
+          <div class="job-col job-col-right">
+            <div class="timeline-card">
+              <p class="cell-label">Skills</p>
+              <div class="skills-grid">
+                <span class="skill-tag">Financial Analysis</span>
+                <span class="skill-tag">Management</span>
+                <span class="skill-tag">Problem Solving</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label teal">Hobbies</p>
+              <div class="skills-grid">
+                <span class="skill-tag hobby">Campus activities</span>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Certifications</p>
+              <ul class="cert-list">
+                <li>B.S. Business Administration — Finance</li>
+                <li>Minor in Management</li>
+              </ul>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Volunteer</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+            <div class="timeline-card">
+              <p class="cell-label">Charity</p>
+              <p class="side-empty">None listed — add if applicable</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
     </div>
   </section>
 
@@ -681,7 +899,7 @@
       });
     }, { threshold: 0.12 });
 
-    document.querySelectorAll('.reveal, .role-card, .bento-cell').forEach(el => {
+    document.querySelectorAll('.job-block').forEach(el => {
       revealObserver.observe(el);
     });
   </script>
